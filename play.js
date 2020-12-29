@@ -25,12 +25,12 @@ deathMusic.src = "audio/death.mp3";
 var rast = 120;
 
 document.addEventListener("keydown", moveUp);
-var xPos = 10;
-var yPos = 150;
-var grav = 4;
+var posX = 10;
+var posY = 150;
+var gravitation = 4;
 
 function moveUp() {
-	yPos -= 50;
+	posY -= 50;
 }
 var srwd = [];
 srwd[0] = {
@@ -57,13 +57,13 @@ function draw() {
 		}
 
 		if(
-		xPos + bullet.width >= srwd[i].x//
+		posX + bullet.width >= srwd[i].x//
 		&& 
-		xPos <= srwd[i].x + swrdUp.width//
+		posX <= srwd[i].x + swrdUp.width//
 		&& 
-		(yPos <= srwd[i].y + swrdUp.height//
+		(posY <= srwd[i].y + swrdUp.height//
 		|| 
-		yPos + bullet.height >= srwd[i].y + swrdUp.height + rast)//пол
+		posY + bullet.height >= srwd[i].y + swrdUp.height + rast)//пол
 		)
 		{
 			deathMusic.play();
@@ -78,16 +78,15 @@ function draw() {
 	ctx.drawImage(fg2, 288, cvs.height - fg2.height);
 	ctx.drawImage(fg2, 576, cvs.height - fg2.height);
 	ctx.drawImage(fg2, 864, cvs.height - fg2.height);
-	ctx.drawImage(bullet, xPos, yPos);
+	ctx.drawImage(bullet, posX, posY);
 
-	yPos += grav;
-	if(yPos + bullet.height >= cvs.height - fg2.height){
-		grav=0;
+	posY += gravitation;
+	if(posY + bullet.height >= cvs.height - fg2.height){
+		gravitation=0;
 	}
 	else{
-		grav=4;
+		gravitation=4;
 	}
-
 	ctx.fillStyle = "#000";
 	ctx.font = "24px Times New Roman";
 	ctx.fillText("Score: " + score, 10, cvs.height - 20);
