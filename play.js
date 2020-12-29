@@ -1,21 +1,20 @@
 var cvs = document.getElementById("canvas");
 var ctx = cvs.getContext("2d");
 
-var bird = new Image();
+var bullet = new Image();
 var bg = new Image();
 var bg2 = new Image();
 var fg = new Image();
 var fg2 = new Image();
-var pipeUp = new Image();
-var pipeBottom = new Image();
+var swrdUp = new Image();
+var swrdBottom = new Image();
 
-bird.src = "img/head.png";
+bullet.src = "img/head.png";
 bg.src = "img/bg1.png";
 bg2.src = "img/bg2.png";
-fg.src = "img/fg.png";
 fg2.src = "img/fg2.png";
-pipeUp.src = "img/swrdUp.png";
-pipeBottom.src = "img/swrdBottom.png";
+swrdUp.src = "img/swrdUp.png";
+swrdBottom.src = "img/swrdBottom.png";
 
 var loadMusic = new Audio();
 var deathMusic = new Audio();
@@ -23,69 +22,55 @@ var deathMusic = new Audio();
 loadMusic.src = "audio/onload.mp3";
 deathMusic.src = "audio/death.mp3";
 
+var rast = 120;
 
-
-var gap = 120;
-
-// При нажатии на какую-либо кнопку
 document.addEventListener("keydown", moveUp);
-
-function moveUp() {
-	yPos -= 50;
-
-}
-
-
-var pipe = [];
-
-pipe[0] = {
-	x : cvs.width,
-	y : 0
-}
-
-var score = 0;
-
-
-
-
-
 var xPos = 10;
 var yPos = 150;
 var grav = 4;
 
+function moveUp() {
+	yPos -= 50;
+}
+var srwd = [];
+srwd[0] = {
+	x : cvs.width,
+	y : 0
+}
+var score = 0;
 
 function draw() {
 	loadMusic.play();
 	ctx.drawImage(bg, 0, 0);
 
-	for(var i = 0; i < pipe.length; i++) {
-		ctx.drawImage(pipeUp, pipe[i].x, pipe[i].y);
-		ctx.drawImage(pipeBottom, pipe[i].x, pipe[i].y + pipeUp.height + gap);
+	for(var i = 0; i < srwd.length; i++) {
+		ctx.drawImage(swrdUp, srwd[i].x, srwd[i].y);
+		ctx.drawImage(swrdBottom, srwd[i].x, srwd[i].y + swrdUp.height + rast);
 
-		pipe[i].x-=5;
+		srwd[i].x-=5;
 
-		if(pipe[i].x == 652) {
-			pipe.push({
+		if(srwd[i].x == 652) {
+			srwd.push({
 			x : cvs.width,
-			y : Math.floor(Math.random() * pipeUp.height) - pipeUp.height
+			y : Math.floor(Math.random() * swrdUp.height) - swrdUp.height
 			});
 		}
 
 		if(
-		xPos + bird.width >= pipe[i].x//
+		xPos + bullet.width >= srwd[i].x//
 		&& 
-		xPos <= pipe[i].x + pipeUp.width//
+		xPos <= srwd[i].x + swrdUp.width//
 		&& 
-		(yPos <= pipe[i].y + pipeUp.height//
+		(yPos <= srwd[i].y + swrdUp.height//
 		|| 
-		yPos + bird.height >= pipe[i].y + pipeUp.height + gap)//пол
+		yPos + bullet.height >= srwd[i].y + swrdUp.height + rast)//пол
 		)
 		{
 			deathMusic.play();
 			alert("GAME OVER, score = " + score);
 			alert.onclick(location.reload());
 		}
-		if(pipe[i].x == 42) {
+		if(srwd[i].x == 42) {
 			score++;
 		}
 	}
@@ -93,10 +78,10 @@ function draw() {
 	ctx.drawImage(fg2, 288, cvs.height - fg2.height);
 	ctx.drawImage(fg2, 576, cvs.height - fg2.height);
 	ctx.drawImage(fg2, 864, cvs.height - fg2.height);
-	ctx.drawImage(bird, xPos, yPos);
+	ctx.drawImage(bullet, xPos, yPos);
 
 	yPos += grav;
-	if(yPos + bird.height >= cvs.height - fg2.height){
+	if(yPos + bullet.height >= cvs.height - fg2.height){
 		grav=0;
 	}
 	else{
@@ -104,10 +89,9 @@ function draw() {
 	}
 
 	ctx.fillStyle = "#000";
-	ctx.font = "24px Verdana";
-	ctx.fillText("Счет: " + score, 10, cvs.height - 20);
+	ctx.font = "24px Times New Roman";
+	ctx.fillText("Score: " + score, 10, cvs.height - 20);
 	requestAnimationFrame(draw);
 
 }
-
-pipeBottom.onload = draw;
+swrdBottom.onload = draw;
